@@ -128,9 +128,52 @@ cd ecommerce-gin
 go mod download
 ```
 
-### 3. Configure environment variables
+### 3. Generate JWT Secret
 
-Create a `.env` file in the root directory:
+**What is JWT Secret?**
+
+The JWT (JSON Web Token) Secret is a cryptographic key used to sign and verify authentication tokens. It ensures that:
+- Tokens cannot be forged or tampered with
+- Only your server can generate valid tokens
+- Token authenticity can be verified
+
+**Why do you need it?**
+
+JWT tokens contain user information (like user ID and role) and are used for authentication. The secret key:
+- **Signs** the token when a user logs in
+- **Verifies** the token on every authenticated request
+- **Protects** against token manipulation by attackers
+
+⚠️ **Security Note**: If someone gets your JWT secret, they can create fake authentication tokens and impersonate any user, including admins!
+
+**Generate a secure random JWT secret:**
+
+**Windows (PowerShell):**
+```powershell
+$bytes = New-Object byte[] 32; (New-Object Security.Cryptography.RNGCryptoServiceProvider).GetBytes($bytes); [Convert]::ToBase64String($bytes)
+```
+
+**Linux/Mac:**
+```bash
+openssl rand -base64 32
+```
+
+**Node.js:**
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+Copy the generated string and use it as your `JWT_SECRET` in the `.env` file.
+
+### 4. Configure environment variables
+
+Copy `.env.example` to `.env` and update the values:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` file:
 
 ```env
 # Application
@@ -144,8 +187,9 @@ DB_USER=root
 DB_PASSWORD=your_password
 DB_NAME=ecommerce_go
 
-# JWT
-JWT_SECRET=your-super-secret-key-here
+# JWT Configuration
+# IMPORTANT: Generate a secure random secret using the command above!
+JWT_SECRET=your-generated-base64-secret-here-minimum-32-characters
 ACCESS_TOKEN_MINUTES=15
 REFRESH_TOKEN_DAYS=7
 
@@ -158,12 +202,12 @@ S3_REGION=auto
 S3_PUBLIC_URL=https://pub-xxxxx.r2.dev
 ```
 
-### 4. Create MySQL database
+### 5. Create MySQL database
 ```sql
 CREATE DATABASE ecommerce_go;
 ```
 
-### 5. Run the application
+### 6. Run the application
 ```bash
 go run ./cmd/api/main.go
 ```
