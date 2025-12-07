@@ -239,7 +239,44 @@ docker-compose -f docker-compose.dev.yml up -d
 go run ./cmd/api/main.go
 ```
 
-### 💻 Option B: Local Development (Manual Setup)
+### 🌍 Option C: Using Published Docker Image
+
+**Deploy anywhere without building from source!**
+
+This app is published on Docker Hub: [`janakdev2002/golang-ecommerce-backend:v1.0`](https://hub.docker.com/r/janakdev2002/golang-ecommerce-backend)
+
+#### Quick Deploy (3 steps!)
+
+```bash
+# 1. Create .env file (copy from .env.docker template)
+cp .env.docker .env
+# Edit .env with your configuration
+
+# 2. Download production compose file
+curl -O https://raw.githubusercontent.com/janak-dev2002/ecommerce-gin/main/docker-compose.production.yml
+
+# 3. Start services
+docker-compose -f docker-compose.production.yml up -d
+```
+
+**Or if you have the repo:**
+```bash
+cp .env.docker .env
+# Edit .env with your settings
+docker-compose -f docker-compose.production.yml up -d
+```
+
+**Access your application:**
+- **API**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger/index.html
+
+**Benefits:**
+- ✅ No build required - just pull and run
+- ✅ Consistent across all environments
+- ✅ Fast deployment (pre-built image)
+- ✅ Perfect for cloud deployments
+
+### 💻 Option D: Local Development (Manual Setup)
 
 **For when you want full control and direct access to services.**
 
@@ -780,6 +817,79 @@ See the **Example Requests** section above for cURL commands.
 - **`SWAGGER_GENERATION_SUMMARY.md`** - Summary of Swagger implementation
 - **`S3_STORAGE_GUIDE.md`** - AWS S3 / Cloudflare R2 setup guide
 - **Swagger UI** - Interactive API documentation at `/swagger/index.html`
+
+## 🐳 Publishing to Docker Hub
+
+This project is published on Docker Hub for easy deployment anywhere!
+
+**Published Image:** [`janakdev2002/golang-ecommerce-backend:v1.0`](https://hub.docker.com/r/janakdev2002/golang-ecommerce-backend)
+
+### For Developers: Publishing Updates
+
+```bash
+# 1. Login to Docker Hub
+docker login
+
+# 2. Build with version tag
+docker build -t janakdev2002/golang-ecommerce-backend:v1.1 .
+docker tag janakdev2002/golang-ecommerce-backend:v1.1 janakdev2002/golang-ecommerce-backend:latest
+
+# 3. Push to Docker Hub
+docker push janakdev2002/golang-ecommerce-backend:v1.1
+docker push janakdev2002/golang-ecommerce-backend:latest
+```
+
+### For Users: Deploy Anywhere
+
+```bash
+# Pull the latest image
+docker pull janakdev2002/golang-ecommerce-backend:latest
+
+# Use docker-compose.production.yml to deploy
+docker-compose -f docker-compose.production.yml up -d
+```
+
+### Cloud Deployment Examples
+
+**AWS ECS/Fargate:**
+```json
+{
+  "image": "janakdev2002/golang-ecommerce-backend:v1.0",
+  "portMappings": [{"containerPort": 8080}]
+}
+```
+
+**Google Cloud Run:**
+```bash
+gcloud run deploy ecommerce-backend \
+  --image=janakdev2002/golang-ecommerce-backend:v1.0 \
+  --platform=managed
+```
+
+**Azure Container Instances:**
+```bash
+az container create \
+  --name ecommerce-backend \
+  --image janakdev2002/golang-ecommerce-backend:v1.0 \
+  --ports 8080
+```
+
+**Kubernetes:**
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-backend
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: app
+        image: janakdev2002/golang-ecommerce-backend:v1.0
+        ports:
+        - containerPort: 8080
+```
 
 ## 🛠️ Development Workflow
 

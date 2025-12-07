@@ -1,0 +1,102 @@
+# docker-compose.production.yml
+# Production deployment using published Docker image from Docker Hub
+# This file is for users who want to deploy the app without building from source
+#
+# Prerequisites:
+# 1. Docker and Docker Compose installed
+# 2. Create .env file with your configuration (copy from .env.docker template)
+#
+# Usage:
+#   docker-compose -f docker-compose.production.yml up -d
+#
+# Stop:
+#   docker-compose -f docker-compose.production.yml down
+#
+# View logs:
+#   docker-compose -f docker-compose.production.yml logs -f
+
+version: '3.8'
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ecommerce-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis Cache Service
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - ecommerce-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Go Application Service (from Docker Hub)
+  app:
+    # Published Docker image from Docker Hub
+    # No need to build locally - just pull and run!
+    image: janakdev2002/golang-ecommerce-backend:v1.0
+    container_name: ecommerce-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      # Make sure to create .env file before running
+      - .env
+    environment:
+      # Override for Docker network communication
+      DB_HOST: mysql
+      DB_PORT: 3306
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    networks:
+      - ecommerce-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
