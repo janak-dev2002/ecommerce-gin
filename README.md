@@ -1,8 +1,17 @@
 # E-Commerce Backend - Gin Framework
 
-A comprehensive RESTful API backend for an e-commerce platform built with Go, Gin web framework, MySQL database, and Redis cache. Features include user authentication, product management, shopping cart, order processing, payment integration, cloud storage for product images, and **complete Swagger/OpenAPI documentation**.
+A comprehensive RESTful API backend for an e-commerce platform built with Go, Gin web framework, MySQL database, and Redis cache. Features include user authentication, product management, shopping cart, order processing, payment integration, cloud storage for product images, **complete Swagger/OpenAPI documentation**, and **Docker containerization** for easy deployment.
 
 ## 🚀 Features
+
+### 🐳 Docker Deployment
+- **Fully containerized** application with Docker
+- **Docker Compose** for multi-container orchestration
+- **Development and production** configurations
+- **One-command deployment** with all dependencies
+- **Persistent storage** with Docker volumes
+- **Health checks** for all services
+- **Web-based management tools** (phpMyAdmin, Redis Commander)
 
 ### 📚 API Documentation
 - **Interactive Swagger UI** for testing all endpoints
@@ -140,9 +149,17 @@ ecommerce-gin/
 │       ├── password.go          # Password validation
 │       └── token.go             # JWT token generation
 ├── uploads/                     # Local uploads directory
+├── Dockerfile                   # Docker image build instructions
+├── docker-compose.yml           # Production Docker setup
+├── docker-compose.dev.yml       # Development Docker setup
+├── .dockerignore                # Files to exclude from Docker build
 ├── .env                         # Environment variables
+├── .env.docker                  # Docker environment template
+├── start-docker.sh              # Quick start script (Linux/Mac)
+├── start-docker.bat             # Quick start script (Windows)
 ├── go.mod
 ├── README.md
+├── DOCKER_GUIDE.md              # Complete Docker guide for beginners
 ├── SWAGGER_DOCUMENTATION.md     # Comprehensive API documentation
 ├── SWAGGER_QUICK_START.md       # Quick start guide for testing
 └── S3_STORAGE_GUIDE.md          # S3/R2 setup guide
@@ -150,30 +167,72 @@ ecommerce-gin/
 
 ## 🔧 Installation & Setup
 
-### Prerequisites
+You can run this application in two ways:
+
+### 🐳 Option A: Docker (Recommended - Easiest!)
+
+**Perfect for beginners! Everything runs in containers.**
+
+#### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (includes Docker Compose)
+
+#### Quick Start (30 seconds!)
+
+**Windows:**
+```bash
+# Double-click start-docker.bat
+# OR run in PowerShell:
+.\start-docker.bat
+```
+
+**Linux/Mac:**
+```bash
+chmod +x start-docker.sh
+./start-docker.sh
+```
+
+That's it! The script will:
+1. Check if Docker is installed
+2. Create `.env` file from template
+3. Build and start all services (MySQL, Redis, Go app)
+4. Show you the URLs to access
+
+**Access your application:**
+- API: http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger/index.html
+- phpMyAdmin: http://localhost:8081
+- Redis Commander: http://localhost:8082
+
+**For detailed Docker instructions, see [`DOCKER_GUIDE.md`](DOCKER_GUIDE.md)**
+
+### 💻 Option B: Local Development (Manual Setup)
+
+**For when you want full control and direct access to services.**
+
+#### Prerequisites
 - Go 1.25 or higher
 - MySQL 8.0 or higher
 - Redis 6.0 or higher
 - AWS S3 account or Cloudflare R2 account (for image uploads)
 - swaggo/swag CLI tool (for regenerating API docs)
 
-### 1. Clone the repository
+#### 1. Clone the repository
 ```bash
 git clone <repository-url>
 cd ecommerce-gin
 ```
 
-### 2. Install dependencies
+#### 2. Install dependencies
 ```bash
 go mod download
 ```
 
-### 3. Install Swagger CLI (optional, for regenerating docs)
+#### 3. Install Swagger CLI (optional, for regenerating docs)
 ```bash
 go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
-### 3. Generate JWT Secret
+#### 4. Generate JWT Secret
 
 **What is JWT Secret?**
 

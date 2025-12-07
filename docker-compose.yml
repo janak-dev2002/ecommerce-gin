@@ -1,0 +1,105 @@
+# docker-compose.yml
+# This file defines all the services (containers) needed for the application
+# It allows you to start everything with a single command: docker-compose up
+
+version: '3.8'
+
+# Define networks for container communication
+networks:
+  ecommerce-network:
+    driver: bridge
+
+# Define volumes for persistent data storage
+volumes:
+  mysql-data:
+    driver: local
+  redis-data:
+    driver: local
+  uploads-data:
+    driver: local
+
+services:
+  # MySQL Database Service
+  mysql:
+    image: mysql:8.0
+    container_name: ecommerce-mysql
+    restart: unless-stopped
+    environment:
+      # Root password for MySQL
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      # Create this database on startup
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ecommerce_go}
+      # Create this user
+      MYSQL_USER: ${MYSQL_USER:-ecommerce_user}
+      # Password for the user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ecommerce_password}
+    ports:
+      # Map container port 3306 to host port 3307
+      # Format: "host_port:container_port"
+      # Using 3307 to avoid conflicts with local MySQL
+      - "3307:3306"
+    volumes:
+      # Persist database data
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ecommerce-network
+    healthcheck:
+      # Check if MySQL is ready to accept connections
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis Cache Service
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-redis
+    restart: unless-stopped
+    ports:
+      # Map Redis port
+      - "6380:6379"
+    volumes:
+      # Persist Redis data
+      - redis-data:/data
+    networks:
+      - ecommerce-network
+    # Start Redis with persistence enabled
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Go Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      # Load all environment variables from .env file
+      - .env
+    environment:
+      # Override specific values for Docker network
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    volumes:
+      - uploads-data:/app/uploads
+    networks:
+      - ecommerce-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -1,0 +1,52 @@
+# .dockerignore - tells Docker which files to ignore when building
+
+# Git files
+.git
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test files
+*_test.go
+coverage.out
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Logs
+*.log
+
+# Uploads (will be created in container)
+uploads/*
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
