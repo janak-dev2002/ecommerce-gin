@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(r *gin.Engine) {
+func SetupRoutes(r *gin.Engine) *gin.RouterGroup {
 	// Public auth routes
 	r.POST("/auth/signup", controllers.Signup)
 	r.POST("/auth/login", controllers.Login)
@@ -29,4 +29,6 @@ func SetupRoutes(r *gin.Engine) {
 			"role":    role,
 		})
 	})
+
+	return api
 }

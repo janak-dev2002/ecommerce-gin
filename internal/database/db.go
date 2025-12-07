@@ -37,6 +37,7 @@ func Connect() {
 		&models.CartItem{},
 		&models.Order{},
 		&models.OrderItem{},
+		&models.PaymentIntent{},
 	)
 
 	DB = db

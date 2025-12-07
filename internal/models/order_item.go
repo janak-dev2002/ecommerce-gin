@@ -10,7 +10,8 @@ type OrderItem struct {
 
 	Quantity int     `json:"quantity"`
 	Price    float64 `json:"price"`
+	Subtotal float64 `json:"subtotal"` // quantity * price
 
 	Order   Order
-	Product Product
+	Product Product `json:"product"`
 }

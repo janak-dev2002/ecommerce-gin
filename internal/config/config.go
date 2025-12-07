@@ -19,6 +19,12 @@ type Config struct {
 	JWTSecret          string
 	AccessTokenMinutes int
 	RefreshTokenDays   int
+	S3Endpoint         string `mapstructure:"S3_ENDPOINT"`
+	S3Key              string `mapstructure:"S3_KEY"`
+	S3Secret           string `mapstructure:"S3_SECRET"`
+	S3Bucket           string `mapstructure:"S3_BUCKET"`
+	S3Region           string `mapstructure:"S3_REGION"`
+	S3PublicURL        string `mapstructure:"S3_PUBLIC_URL"`
 }
 
 var Cfg Config
@@ -49,6 +55,12 @@ func LoadConfig() {
 		JWTSecret:          getEnv("JWT_SECRET", "super-secret"),
 		AccessTokenMinutes: accessMin,
 		RefreshTokenDays:   refreshDays,
+		S3Endpoint:         getEnv("S3_ENDPOINT", ""),
+		S3Key:              getEnv("S3_KEY", ""),
+		S3Secret:           getEnv("S3_SECRET", ""),
+		S3Bucket:           getEnv("S3_BUCKET", ""),
+		S3Region:           getEnv("S3_REGION", "auto"),
+		S3PublicURL:        getEnv("S3_PUBLIC_URL", ""),
 	}
 	log.Println("Config loaded")
 }
