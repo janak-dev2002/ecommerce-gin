@@ -25,6 +25,9 @@ type Config struct {
 	S3Bucket           string `mapstructure:"S3_BUCKET"`
 	S3Region           string `mapstructure:"S3_REGION"`
 	S3PublicURL        string `mapstructure:"S3_PUBLIC_URL"`
+	RedisHost          string `mapstructure:"REDIS_HOST"`
+	RedisPort          string `mapstructure:"REDIS_PORT"`
+	RedisPassword      string `mapstructure:"REDIS_PASSWORD"`
 }
 
 var Cfg Config
@@ -61,6 +64,9 @@ func LoadConfig() {
 		S3Bucket:           getEnv("S3_BUCKET", ""),
 		S3Region:           getEnv("S3_REGION", "auto"),
 		S3PublicURL:        getEnv("S3_PUBLIC_URL", ""),
+		RedisHost:          getEnv("REDIS_HOST", "localhost"),
+		RedisPort:          getEnv("REDIS_PORT", "6379"),
+		RedisPassword:      getEnv("REDIS_PASSWORD", ""),
 	}
 	log.Println("Config loaded")
 }

@@ -10,6 +10,17 @@ import (
 	"ecommerce-gin/internal/models"
 )
 
+// Checkout godoc
+// @Summary Checkout cart
+// @Description Creates an order from the user's cart
+// @Tags Orders
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} CheckoutResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/orders/checkout [post]
 func Checkout(c *gin.Context) {
 	uidRaw, _ := c.Get("user_id")
 	userID := uint(uidRaw.(float64))
@@ -107,6 +118,16 @@ func Checkout(c *gin.Context) {
 	})
 }
 
+// MyOrders godoc
+// @Summary Get user's orders
+// @Description Retrieves all orders for the authenticated user
+// @Tags Orders
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {array} Order
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/orders/ [get]
 func MyOrders(c *gin.Context) {
 	uidRaw, _ := c.Get("user_id")
 	userID := uint(uidRaw.(float64))
@@ -120,6 +141,18 @@ func MyOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, orders)
 }
 
+// OrderDetails godoc
+// @Summary Get order details
+// @Description Retrieves details of a specific order
+// @Tags Orders
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Order ID"
+// @Success 200 {object} Order
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/orders/{id} [get]
 func OrderDetails(c *gin.Context) {
 	
 	uidRaw, _ := c.Get("user_id")

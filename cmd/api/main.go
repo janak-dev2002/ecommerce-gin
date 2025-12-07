@@ -1,6 +1,22 @@
 package main
 
+// @title E-Commerce API
+// @version 1.0
+// @description This is a backend service for the Go e-commerce project with comprehensive authentication, product management, cart, orders, and payment functionality.
+// @contact.name API Support
+// @contact.email support@ecommerce.com
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+// @host localhost:8080
+// @BasePath /
+// @schemes http https
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+
 import (
+	"ecommerce-gin/internal/cache"
 	"ecommerce-gin/internal/config"
 	"ecommerce-gin/internal/database"
 	"ecommerce-gin/internal/routes"
@@ -8,6 +24,11 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "ecommerce-gin/docs" // Import generated docs
 )
 
 func main() {
@@ -19,6 +40,9 @@ func main() {
 
 	// Initialize S3 client
 	services.InitS3()
+
+	// Connect Redis
+	cache.Connect()
 
 	// Gin setup
 	if config.Cfg.AppEnv == "production" {
@@ -44,6 +68,8 @@ func main() {
 	routes.RegisterAdminOrderRoutes(r, api)
 	routes.RegisterPaymentRoutes(r, api)
 	routes.RegisterUploadRoutes(r, api)
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Health
 	r.GET("/health", func(c *gin.Context) {

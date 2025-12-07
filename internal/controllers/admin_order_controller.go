@@ -9,8 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AdminListOrdersHandler GET /admin/orders
-// query: status, page, limit, from (YYYY-MM-DD), to (YYYY-MM-DD)
+// AdminListOrdersHandler godoc
+// @Summary List all orders (Admin only)
+// @Description Gets a paginated list of all orders with optional filters
+// @Tags Admin
+// @Security BearerAuth
+// @Produce json
+// @Param status query string false "Filter by status"
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Items per page" default(20)
+// @Param from query string false "Start date (YYYY-MM-DD)"
+// @Param to query string false "End date (YYYY-MM-DD)"
+// @Success 200 {object} AdminOrderListResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/admin/orders [get]
 func AdminListOrdersHandler(c *gin.Context) {
 	limit := parseIntQuery(c, "limit", 20)
 	page := parseIntQuery(c, "page", 1)
@@ -46,7 +59,17 @@ func AdminListOrdersHandler(c *gin.Context) {
 	})
 }
 
-// AdminGetOrderHandler GET /admin/orders/:id
+// AdminGetOrderHandler godoc
+// @Summary Get order by ID (Admin only)
+// @Description Retrieves detailed information about a specific order
+// @Tags Admin
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Order ID"
+// @Success 200 {object} Order
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/admin/orders/{id} [get]
 func AdminGetOrderHandler(c *gin.Context) {
 	id := parseUint(c.Param("id"))
 	order, err := database.AdminGetOrderByID(id)
@@ -57,8 +80,20 @@ func AdminGetOrderHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, order)
 }
 
-// AdminUpdateOrderStatusHandler PUT /admin/orders/:id/status
-// Body: { "status": "confirmed" } — allowed transitions handled here
+// AdminUpdateOrderStatusHandler godoc
+// @Summary Update order status (Admin only)
+// @Description Updates the status of an order with validation
+// @Tags Admin
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Order ID"
+// @Param status body UpdateOrderStatusInput true "New Status"
+// @Success 200 {object} MessageResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/admin/orders/{id}/status [put]
 func AdminUpdateOrderStatusHandler(c *gin.Context) {
 	id := parseUint(c.Param("id"))
 	var body struct {
@@ -132,7 +167,18 @@ func AdminUpdateOrderStatusHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "status updated", "status": next})
 }
 
-// AdminOrderStatsHandler GET /admin/orders/stats
+// AdminOrderStatsHandler godoc
+// @Summary Get order statistics (Admin only)
+// @Description Retrieves order counts by status and revenue summary
+// @Tags Admin
+// @Security BearerAuth
+// @Produce json
+// @Param from query string false "Start date (YYYY-MM-DD)"
+// @Param to query string false "End date (YYYY-MM-DD)"
+// @Success 200 {object} OrderStatsResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/admin/orders/stats [get]
 func AdminOrderStatsHandler(c *gin.Context) {
 	counts, err := database.GetOrderCountsByStatus()
 	if err != nil {

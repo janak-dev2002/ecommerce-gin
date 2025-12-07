@@ -11,7 +11,7 @@ func RegisterProductRoutes(r *gin.Engine, group ...*gin.RouterGroup) {
 
 	// Public
 	r.GET("/products", controllers.ListProducts) // /api/products
-	r.GET("/products/:slug", controllers.GetProduct)
+	r.GET("/products/:slug", middleware.RateLimit(2), controllers.GetProduct)
 
 	// Admin only
 	admin := group[0].Group("/admin/products") // /api/admin/products

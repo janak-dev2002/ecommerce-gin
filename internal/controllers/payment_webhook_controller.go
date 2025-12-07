@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// PaymentWebhook godoc
+// @Summary Payment webhook
+// @Description Handles payment gateway callbacks
+// @Tags Payment
+// @Produce json
+// @Param intent_id query string true "Payment Intent ID"
+// @Success 200 {object} PaymentWebhookResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/payment/webhook [post]
 func PaymentWebhook(c *gin.Context) {
 	// in real world gateway sends JSON
 	intentID, _ := strconv.ParseUint(c.Query("intent_id"), 10, 64)

@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// StartPaymentHandler godoc
+// @Summary Start payment process
+// @Description Initiates payment for an order
+// @Tags Payment
+// @Security BearerAuth
+// @Produce json
+// @Param orderId path string true "Order ID"
+// @Success 200 {object} PaymentIntentResponse
+// @Failure 404 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/payment/start/{orderId} [post]
 func StartPaymentHandler(c *gin.Context) {
 	
 	orderID, _ := strconv.ParseUint(c.Param("orderId"), 10, 64)

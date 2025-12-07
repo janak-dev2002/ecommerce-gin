@@ -12,6 +12,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Signup godoc
+// @Summary Register new user
+// @Description Creates a new user account
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param user body SignupInput true "User Data"
+// @Success 201 {object} ResponseUser
+// @Failure 400 {object} ErrorResponse
+// @Router /auth/signup [post]
 // Signup creates a new user (password hashed)
 func Signup(c *gin.Context) {
 	var body struct {
@@ -62,7 +72,17 @@ func Signup(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
 }
 
-// Login authenticates and issues access token + sets refresh cookie
+// Login godoc
+// @Summary User login
+// @Description Authenticates user and returns access token with refresh cookie
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param credentials body LoginInput true "User Credentials"
+// @Success 200 {object} LoginResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 422 {object} ErrorResponse
+// @Router /auth/login [post]
 func Login(c *gin.Context) {
 	var req struct {
 		Email    string `json:"email" binding:"required,email"`
@@ -128,7 +148,14 @@ func Login(c *gin.Context) {
 	})
 }
 
-// Refresh rotates the refresh token and issues a new access token
+// Refresh godoc
+// @Summary Refresh access token
+// @Description Rotates refresh token and issues new access token
+// @Tags Auth
+// @Produce json
+// @Success 200 {object} RefreshResponse
+// @Failure 401 {object} ErrorResponse
+// @Router /auth/refresh [post]
 func Refresh(c *gin.Context) {
 	rt, err := c.Cookie("refresh_token")
 	if err != nil || rt == "" {
@@ -175,7 +202,15 @@ func Refresh(c *gin.Context) {
 	})
 }
 
-// Logout clears stored refresh token and removes cookie
+// Logout godoc
+// @Summary Logout user
+// @Description Clears refresh token and removes cookie
+// @Tags Auth
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} MessageResponse
+// @Failure 401 {object} ErrorResponse
+// @Router /api/auth/logout [post]
 func Logout(c *gin.Context) {
 	uidRaw, exists := c.Get("user_id")
 	if !exists {

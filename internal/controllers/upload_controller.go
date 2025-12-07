@@ -10,6 +10,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UploadProductImage godoc
+// @Summary Upload product image (Local)
+// @Description Uploads a product image to local storage
+// @Tags Upload
+// @Security BearerAuth
+// @Accept multipart/form-data
+// @Produce json
+// @Param image formData file true "Product Image"
+// @Success 200 {object} UploadResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/upload [post]
 func UploadProductImage(c *gin.Context) {
 	// Single file upload
 	file, err := c.FormFile("image")
@@ -43,6 +55,18 @@ func UploadProductImage(c *gin.Context) {
 	})
 }
 
+// UploadProductImageS3 godoc
+// @Summary Upload product image (S3)
+// @Description Uploads a product image to AWS S3
+// @Tags Upload
+// @Security BearerAuth
+// @Accept multipart/form-data
+// @Produce json
+// @Param image formData file true "Product Image"
+// @Success 200 {object} UploadResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/upload/product [post]
 func UploadProductImageS3(c *gin.Context) {
 
 	file, err := c.FormFile("image")

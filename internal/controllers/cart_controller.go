@@ -9,7 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Add item to cart
+// AddToCart godoc
+// @Summary Add item to cart
+// @Description Adds a product to the user's shopping cart
+// @Tags Cart
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param item body AddToCartInput true "Cart Item"
+// @Success 200 {object} MessageResponse
+// @Success 201 {object} MessageResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Router /api/cart/add [post]
 func AddToCart(c *gin.Context) {
 	var body struct {
 		ProductID uint `json:"product_id" binding:"required"`
@@ -67,7 +79,16 @@ func AddToCart(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "added to cart"})
 }
 
-// Get full cart
+// GetCart godoc
+// @Summary Get user's cart
+// @Description Retrieves the user's shopping cart with all items
+// @Tags Cart
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} CartResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/cart [get]
 func GetCart(c *gin.Context) {
 	
 	uidRaw, _ := c.Get("user_id")
@@ -91,7 +112,20 @@ func GetCart(c *gin.Context) {
 	})
 }
 
-// Update quantity
+// UpdateCartQuantity godoc
+// @Summary Update cart item quantity
+// @Description Updates the quantity of a specific cart item
+// @Tags Cart
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Cart Item ID"
+// @Param quantity body UpdateCartQuantityInput true "New Quantity"
+// @Success 200 {object} MessageResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 404 {object} ErrorResponse
+// @Router /api/cart/{id} [put]
 func UpdateCartQuantity(c *gin.Context) {
 
 	itemID := parseUint(c.Param("id"))
@@ -123,7 +157,17 @@ func UpdateCartQuantity(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "cart updated"})
 }
 
-// Remove item
+// RemoveFromCart godoc
+// @Summary Remove item from cart
+// @Description Removes a specific item from the cart
+// @Tags Cart
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Cart Item ID"
+// @Success 200 {object} MessageResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/cart/{id} [delete]
 func RemoveFromCart(c *gin.Context) {
 	id := parseUint(c.Param("id"))
 	if err := database.RemoveCartItem(id); err != nil {
@@ -133,7 +177,16 @@ func RemoveFromCart(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "removed"})
 }
 
-// Clear entire cart
+// ClearCart godoc
+// @Summary Clear entire cart
+// @Description Removes all items from the user's cart
+// @Tags Cart
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} MessageResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /api/cart [delete]
 func ClearCart(c *gin.Context) {
 	uidRaw, _ := c.Get("user_id")
 	userID := uint(uidRaw.(float64))

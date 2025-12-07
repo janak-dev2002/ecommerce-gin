@@ -1,0 +1,1149 @@
+basePath: /
+definitions:
+  internal_controllers.AddToCartInput:
+    properties:
+      product_id:
+        example: 1
+        type: integer
+      quantity:
+        example: 2
+        minimum: 1
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  internal_controllers.AdminOrderListResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/internal_controllers.Order'
+        type: array
+      meta:
+        $ref: '#/definitions/internal_controllers.MetaInfo'
+    type: object
+  internal_controllers.CartItem:
+    properties:
+      created_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      product:
+        $ref: '#/definitions/internal_controllers.Product'
+      product_id:
+        example: 1
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+      updated_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  internal_controllers.CartResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/internal_controllers.CartItem'
+        type: array
+      total:
+        example: 1999.98
+        type: number
+    type: object
+  internal_controllers.CheckoutResponse:
+    properties:
+      message:
+        example: order placed
+        type: string
+      order_id:
+        example: 1
+        type: integer
+      total:
+        example: 1999.98
+        type: number
+    type: object
+  internal_controllers.CreateProductInput:
+    properties:
+      category:
+        example: Electronics
+        type: string
+      description:
+        example: High-performance laptop
+        type: string
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      name:
+        example: Laptop
+        type: string
+      price:
+        example: 999.99
+        type: number
+      quantity:
+        example: 10
+        type: integer
+    required:
+    - name
+    - price
+    - quantity
+    type: object
+  internal_controllers.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  internal_controllers.LoginInput:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      password:
+        example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  internal_controllers.LoginResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      expires_in:
+        example: 3600
+        type: integer
+      user:
+        $ref: '#/definitions/internal_controllers.UserResponse'
+    type: object
+  internal_controllers.MessageResponse:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
+  internal_controllers.MetaInfo:
+    properties:
+      limit:
+        example: 20
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  internal_controllers.Order:
+    properties:
+      created_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      order_items:
+        items:
+          $ref: '#/definitions/internal_controllers.OrderItem'
+        type: array
+      status:
+        example: pending
+        type: string
+      total_price:
+        example: 1999.98
+        type: number
+      updated_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      user_id:
+        example: 1
+        type: integer
+    type: object
+  internal_controllers.OrderItem:
+    properties:
+      created_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      order_id:
+        example: 1
+        type: integer
+      price:
+        example: 999.99
+        type: number
+      product:
+        $ref: '#/definitions/internal_controllers.Product'
+      product_id:
+        example: 1
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+      subtotal:
+        example: 1999.98
+        type: number
+      updated_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+    type: object
+  internal_controllers.OrderStatsResponse:
+    properties:
+      counts:
+        additionalProperties:
+          format: int64
+          type: integer
+        example:
+          confirmed: 20
+          pending: 10
+        type: object
+      revenue:
+        example: 50000
+        type: number
+    type: object
+  internal_controllers.PaymentIntentResponse:
+    properties:
+      amount:
+        example: 1999.98
+        type: number
+      payment_intent:
+        example: 1
+        type: integer
+      redirect_url:
+        example: http://localhost:8080/pay-gateway?intent=1
+        type: string
+    type: object
+  internal_controllers.PaymentWebhookResponse:
+    properties:
+      message:
+        example: payment successful
+        type: string
+      order:
+        example: 1
+        type: integer
+    type: object
+  internal_controllers.Product:
+    properties:
+      category:
+        example: Electronics
+        type: string
+      created_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+      description:
+        example: High-performance laptop
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      name:
+        example: Laptop
+        type: string
+      price:
+        example: 999.99
+        type: number
+      quantity:
+        example: 10
+        type: integer
+      slug:
+        example: laptop
+        type: string
+      updated_at:
+        example: "2024-01-01T00:00:00Z"
+        type: string
+    type: object
+  internal_controllers.ProductListResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/internal_controllers.Product'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 100
+        type: integer
+      totalPages:
+        example: 10
+        type: integer
+    type: object
+  internal_controllers.RefreshResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      expires_in:
+        example: 3600
+        type: integer
+    type: object
+  internal_controllers.ResponseUser:
+    properties:
+      message:
+        example: user created
+        type: string
+    type: object
+  internal_controllers.SignupInput:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      name:
+        example: John Doe
+        type: string
+      password:
+        example: password123
+        minLength: 6
+        type: string
+      role:
+        example: customer
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  internal_controllers.UpdateCartQuantityInput:
+    properties:
+      quantity:
+        example: 3
+        minimum: 1
+        type: integer
+    required:
+    - quantity
+    type: object
+  internal_controllers.UpdateOrderStatusInput:
+    properties:
+      status:
+        example: confirmed
+        type: string
+    required:
+    - status
+    type: object
+  internal_controllers.UpdateProductInput:
+    properties:
+      category:
+        example: Electronics
+        type: string
+      description:
+        example: High-performance laptop
+        type: string
+      image_url:
+        example: https://example.com/image.jpg
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      name:
+        example: Laptop
+        type: string
+      price:
+        example: 999.99
+        type: number
+      quantity:
+        example: 10
+        type: integer
+    type: object
+  internal_controllers.UploadResponse:
+    properties:
+      message:
+        example: uploaded
+        type: string
+      url:
+        example: /uploads/20240101120000.jpg
+        type: string
+    type: object
+  internal_controllers.UserResponse:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: John Doe
+        type: string
+      role:
+        example: customer
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@ecommerce.com
+    name: API Support
+  description: This is a backend service for the Go e-commerce project with comprehensive
+    authentication, product management, cart, orders, and payment functionality.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: E-Commerce API
+  version: "1.0"
+paths:
+  /api/admin/orders:
+    get:
+      description: Gets a paginated list of all orders with optional filters
+      parameters:
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.AdminOrderListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: List all orders (Admin only)
+      tags:
+      - Admin
+  /api/admin/orders/{id}:
+    get:
+      description: Retrieves detailed information about a specific order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.Order'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order by ID (Admin only)
+      tags:
+      - Admin
+  /api/admin/orders/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Updates the status of an order with validation
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New Status
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.UpdateOrderStatusInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update order status (Admin only)
+      tags:
+      - Admin
+  /api/admin/orders/stats:
+    get:
+      description: Retrieves order counts by status and revenue summary
+      parameters:
+      - description: Start date (YYYY-MM-DD)
+        in: query
+        name: from
+        type: string
+      - description: End date (YYYY-MM-DD)
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.OrderStatsResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order statistics (Admin only)
+      tags:
+      - Admin
+  /api/admin/products:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new product in the system
+      parameters:
+      - description: Product Data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.CreateProductInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controllers.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new product (Admin only)
+      tags:
+      - Products
+  /api/admin/products/{id}:
+    delete:
+      description: Soft deletes a product from the system
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a product (Admin only)
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      description: Updates product details
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product Update Data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.UpdateProductInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a product (Admin only)
+      tags:
+      - Products
+  /api/auth/logout:
+    post:
+      description: Clears refresh token and removes cookie
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Logout user
+      tags:
+      - Auth
+  /api/cart:
+    delete:
+      description: Removes all items from the user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Clear entire cart
+      tags:
+      - Cart
+    get:
+      description: Retrieves the user's shopping cart with all items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.CartResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user's cart
+      tags:
+      - Cart
+  /api/cart/{id}:
+    delete:
+      description: Removes a specific item from the cart
+      parameters:
+      - description: Cart Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Remove item from cart
+      tags:
+      - Cart
+    put:
+      consumes:
+      - application/json
+      description: Updates the quantity of a specific cart item
+      parameters:
+      - description: Cart Item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New Quantity
+        in: body
+        name: quantity
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.UpdateCartQuantityInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update cart item quantity
+      tags:
+      - Cart
+  /api/cart/add:
+    post:
+      consumes:
+      - application/json
+      description: Adds a product to the user's shopping cart
+      parameters:
+      - description: Cart Item
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.AddToCartInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controllers.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Add item to cart
+      tags:
+      - Cart
+  /api/orders/:
+    get:
+      description: Retrieves all orders for the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_controllers.Order'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user's orders
+      tags:
+      - Orders
+  /api/orders/{id}:
+    get:
+      description: Retrieves details of a specific order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order details
+      tags:
+      - Orders
+  /api/orders/checkout:
+    post:
+      description: Creates an order from the user's cart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.CheckoutResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Checkout cart
+      tags:
+      - Orders
+  /api/payment/start/{orderId}:
+    post:
+      description: Initiates payment for an order
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.PaymentIntentResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Start payment process
+      tags:
+      - Payment
+  /api/payment/webhook:
+    post:
+      description: Handles payment gateway callbacks
+      parameters:
+      - description: Payment Intent ID
+        in: query
+        name: intent_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.PaymentWebhookResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      summary: Payment webhook
+      tags:
+      - Payment
+  /api/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a product image to local storage
+      parameters:
+      - description: Product Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.UploadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upload product image (Local)
+      tags:
+      - Upload
+  /api/upload/product:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Uploads a product image to AWS S3
+      parameters:
+      - description: Product Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.UploadResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upload product image (S3)
+      tags:
+      - Upload
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates user and returns access token with refresh cookie
+      parameters:
+      - description: User Credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      summary: User login
+      tags:
+      - Auth
+  /auth/refresh:
+    post:
+      description: Rotates refresh token and issues new access token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.RefreshResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      summary: Refresh access token
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/internal_controllers.SignupInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_controllers.ResponseUser'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      summary: Register new user
+      tags:
+      - Auth
+  /products:
+    get:
+      description: Gets a paginated list of products with optional filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      - description: Filter by category
+        in: query
+        name: category
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.ProductListResponse'
+      summary: List all products
+      tags:
+      - Products
+  /products/{slug}:
+    get:
+      description: Retrieves a single product by its slug (cached)
+      parameters:
+      - description: Product Slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_controllers.Product'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/internal_controllers.ErrorResponse'
+      summary: Get product by slug
+      tags:
+      - Products
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
