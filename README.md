@@ -11,7 +11,8 @@ A comprehensive RESTful API backend for an e-commerce platform built with Go, Gi
 - **One-command deployment** with all dependencies
 - **Persistent storage** with Docker volumes
 - **Health checks** for all services
-- **Web-based management tools** (phpMyAdmin, Redis Commander)
+- **Environment-based configuration** with .env file
+- **Development tools** (phpMyAdmin, Redis Commander) included in dev mode
 
 ### 📚 API Documentation
 - **Interactive Swagger UI** for testing all endpoints
@@ -79,13 +80,15 @@ A comprehensive RESTful API backend for an e-commerce platform built with Go, Gi
 
 - **Language**: Go 1.25.3
 - **Web Framework**: Gin v1.11.0
-- **Database**: MySQL with GORM v1.31.1
-- **Cache**: Redis v9.17.2
+- **Database**: MySQL 8.0 with GORM v1.31.1
+- **Cache**: Redis 7 (Alpine) v9.17.2
 - **Authentication**: JWT (golang-jwt/jwt/v4 v4.5.2)
 - **API Documentation**: Swagger/OpenAPI (swaggo/swag v1.16.6)
 - **Cloud Storage**: AWS S3 / Cloudflare R2 (AWS SDK v2)
 - **Password Hashing**: bcrypt (golang.org/x/crypto)
 - **Environment Config**: godotenv v1.5.1
+- **Containerization**: Docker & Docker Compose
+- **Dev Tools**: phpMyAdmin, Redis Commander (dev mode only)
 
 ## 📁 Project Structure
 
@@ -198,12 +201,43 @@ That's it! The script will:
 4. Show you the URLs to access
 
 **Access your application:**
-- API: http://localhost:8080
-- Swagger UI: http://localhost:8080/swagger/index.html
-- phpMyAdmin: http://localhost:8081
-- Redis Commander: http://localhost:8082
+- **API**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/swagger/index.html
 
-**For detailed Docker instructions, see [`DOCKER_GUIDE.md`](DOCKER_GUIDE.md)**
+**For development mode** (using `docker-compose.dev.yml`):
+- **phpMyAdmin**: http://localhost:8081 (MySQL management)
+- **Redis Commander**: http://localhost:8082 (Redis management)
+
+**Docker Commands:**
+```bash
+# Stop containers
+docker-compose down
+
+# Stop and remove volumes (fresh start)
+docker-compose down -v
+
+# View logs
+docker-compose logs -f
+
+# View app logs only
+docker-compose logs -f app
+
+# Restart services
+docker-compose restart
+```
+
+**For detailed Docker instructions, see:**
+- **[`DOCKER_GUIDE.md`](DOCKER_GUIDE.md)** - Complete beginner's guide
+- **[`DOCKER_COMMANDS.md`](DOCKER_COMMANDS.md)** - Quick command reference
+
+**Development Mode** (databases only, run app locally):
+```bash
+# Start MySQL, Redis, phpMyAdmin, Redis Commander
+docker-compose -f docker-compose.dev.yml up -d
+
+# Run app locally for live reload
+go run ./cmd/api/main.go
+```
 
 ### 💻 Option B: Local Development (Manual Setup)
 
@@ -269,29 +303,35 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 Copy the generated string and use it as your `JWT_SECRET` in the `.env` file.
 
-### 4. Configure environment variables
+### 5. Configure environment variables
 
-Copy `.env.example` to `.env` and update the values:
+Copy `.env.docker` to `.env` and update the values:
 
 ```bash
-cp .env.example .env
+cp .env.docker .env
 ```
 
-Edit `.env` file:
+Edit `.env` file for **local development**:
 
 ```env
 # Application
 APP_ENV=development
 PORT=8080
 
-# Database
+# MySQL Database Configuration (for Docker)
+MYSQL_ROOT_PASSWORD=your_root_password
+MYSQL_DATABASE=ecommerce_go
+MYSQL_USER=ecommerce_user
+MYSQL_PASSWORD=your_user_password
+
+# Database Connection (use localhost for local dev, mysql for Docker)
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
+DB_USER=ecommerce_user
+DB_PASSWORD=your_user_password
 DB_NAME=ecommerce_go
 
-# Redis
+# Redis (use localhost for local dev, redis for Docker)
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=
@@ -733,9 +773,12 @@ See the **Example Requests** section above for cURL commands.
 
 ## 📖 Additional Documentation
 
-- **`SWAGGER_DOCUMENTATION.md`** - Comprehensive API reference with all endpoints, request/response schemas, and examples
-- **`SWAGGER_QUICK_START.md`** - Step-by-step guide for testing the API using Swagger UI
-- **`S3_STORAGE_GUIDE.md`** - Detailed guide for setting up AWS S3 or Cloudflare R2
+- **`DOCKER_GUIDE.md`** - Complete Docker beginner's guide (600+ lines)
+- **`DOCKER_COMMANDS.md`** - Docker command reference card
+- **`SWAGGER_DOCUMENTATION.md`** - Comprehensive API reference with all endpoints
+- **`SWAGGER_QUICK_START.md`** - Step-by-step guide for testing the API
+- **`SWAGGER_GENERATION_SUMMARY.md`** - Summary of Swagger implementation
+- **`S3_STORAGE_GUIDE.md`** - AWS S3 / Cloudflare R2 setup guide
 - **Swagger UI** - Interactive API documentation at `/swagger/index.html`
 
 ## 🛠️ Development Workflow
